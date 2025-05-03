@@ -2,7 +2,7 @@
 #include <iostream>
 using namespace std;
 
-int main() 
+int main(){
     //int a = 321;
     //int * p = &a;
     //char * r = (char *)p;
@@ -11,7 +11,7 @@ int main()
 	
 	int arr[8] = {2,4,6,8,1,3,5,7};
 	int * p = arr;
-	int * q = arr + 3;)
+	int * q = arr + 3;
 	//fin = 
 	cout << arr[1]<<endl;
 	
