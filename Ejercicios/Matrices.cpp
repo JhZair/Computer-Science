@@ -1,49 +1,48 @@
 #include <iostream>
 using namespace std;
 
-const int N = 3;
-
-void multiplicarMatrices(int* A, int* B, int* C) {
-    for (int i = 0; i < N; ++i)
-        for (int j = 0; j < N; ++j) {
-            *(C + i * N + j) = 0;
-            for (int k = 0; k < N; ++k)
-                *(C + i * N + j) += *(A + i * N + k) * *(B + k * N + j);
+void multiplicarMatrices(int* a, int* b, int* c) {
+    for (int i = 0; i < 3; ++i)
+        for (int j = 0; j < 3; ++j) {
+            *(c + i * 3 + j) = 0;
+            for (int k = 0; k < 3; ++k)
+                *(c + i * 3 + j) += *(a + i * 3 + k) * *(b + k * 3 + j);
         }
 }
 
 void imprimirMatriz(int* M) {
-    for (int i = 0; i < N * N; ++i) {
+    for (int i = 0; i < 3 * 3; ++i) {
         cout << *(M + i) << " ";
-        if ((i + 1) % N == 0) cout << "\n";
+        if ((i + 1) % 3 == 0) cout << "\n";
     }
     cout << "\n";
 }
 
 int main() {
-    int A[N][N] = {
+    int A[3][3] = {
         {1, 2, 3},
         {0, 1, 4},
         {5, 6, 0}
     };
 
-    int B[N][N] = {
+    int B[3][3] = {
         {7, 8, 9},
         {1, 2, 3},
         {4, 5, 6}
     };
 
-    int C[N][N];  
+    int C[3][3];
 
     multiplicarMatrices(&A[0][0], &B[0][0], &C[0][0]);
 
-    int (*resultado[3])[N] = { A, B, C };
-    cout << "Matriz A" << ":\n";
+    int (*resultado[3])[3] = { A, B, C };
+    cout << "Matriz A:\n";
     imprimirMatriz((int*)resultado[0]);
-    cout << "Matriz B" << ":\n";
+    cout << "Matriz B:\n";
     imprimirMatriz((int*)resultado[1]);
-    cout << "Matriz A*B" << ":\n";
+    cout << "Matriz C:\n";
     imprimirMatriz((int*)resultado[2]);
 
     return 0;
 }
+
