@@ -11,7 +11,6 @@ void iniciarJuego(){
 	
 	for(int i = 0; i < 3 ; i++){
 		for(int i = 0; i < 3 ; i++){
-			cout << 
 		}
 	}
 	
@@ -27,5 +26,5 @@ int main() {
 //ordenar array 3x3 que tenga un hueco que se mueva con las flechas 
 //evitar sumar un iterador a un puntero en un bucle, sino cambiar de lugar los punteros
 
-//tarea de multiplicar matrices función mult(int (*p)[3][3])???
+//tarea de multiplicar matrices funciï¿½n mult(int (*p)[3][3])???
 //matriz A=M[0] B=M[1], C=M[2], y m es un array tridimensional
