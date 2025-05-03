@@ -86,4 +86,4 @@ int main(){
     return 0;
 }
 
-//es multiplicar matrices 3x3x3
+//es multiplicar matrices 3x3x3, y el objetivo es que los punteros se muevan
