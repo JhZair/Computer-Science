@@ -87,3 +87,7 @@ int main(){
 }
 
 //es multiplicar matrices 3x3x3, y el objetivo es que los punteros se muevan
+/*
+for(int *p=A;p<A+9;p++)
+    swap(*p,*(p+1));
+*/
