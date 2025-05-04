@@ -50,3 +50,8 @@ int main() {
     cout << "\nGanaste\n";
     return 0;
 }
+
+/* el objetivo es que los punteros se muevan, usando cosas como:
+for(int *p=A;p<A+9;p++)
+    swap(*p,*(p+1));
+*/
