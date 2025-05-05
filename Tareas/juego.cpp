@@ -1,25 +1,52 @@
 #include <iostream>
 using namespace std;
+void mostrar(int** a){
+	for(int i=0;i<3;i++){
+		for(int j=0;j<3;j++){
+			cout << *(*(a+i)+j) << ' ';
+		}
+		cout << '\n';
+	}
+	cout << '\n';
+}
 
-
-void iniciarJuego(){
-	int arr[3][3]= {{1,3,8},{4,6,9},{2,5,7}};
-	
-	cout << "Bienvenido al juego"<<endl;
-	
-	cout << "Tienes que ordenar esta matriz!!"<< endl;
-	
-	for(int i = 0; i < 3 ; i++){
-		for(int i = 0; i < 3 ; i++){
+bool ordenada(int** a){
+	int cont{1};
+	for(int i=0;i<3;i++){
+		for(int j=0;j<3;j++){
+			if(*(*(a+i)+j) != cont++ % 9)
+				return false;
 		}
 	}
-	
+	cout << "Esta ordenado";
+	return true;
 }
+
+ int* buscarzero(int** a){
+	for(int i=0;i<3;i++){
+		for(int j=0;j<3;j++){
+			if(*(*(a+i)+j) == 0)
+				return *(a+i);
+		}
+	}
+ }
 
 int main() {
 
-	iniciarJuego();
+	cout << "Tienes que ordenar esta matriz!!"<< endl;
+	int** matrix= new int*[3];
+	for(int i=0;i<3;i++){
+		*(matrix+i) = new int[3];
+	}
+	matrix[0][0] = 1; matrix[0][1] = 2; matrix[0][2] = 3;
+	matrix[1][0] = 4; matrix[1][1] = 5; matrix[1][2] = 0;
+	matrix[2][0] = 7; matrix[2][1] = 8; matrix[2][2] = 6; 
 	
+	mostrar(matrix);
+	while(!ordenada(matrix)){
+		int* zero = buscarzero(matrix);
+	}
+
 	return 0;
 }
 
