@@ -37,7 +37,7 @@ public:
     bool comparar(int a, int b) const override { return a < b; }
 };
 
-// QuickSort
+// QuickSort con puntero a funcion
 void quickSortFunc(int* a, int low, int high, bool (*comp)(int, int)) {
     if (low >= high) return;
     int pivot = a[high];
@@ -53,19 +53,20 @@ void quickSortFunc(int* a, int low, int high, bool (*comp)(int, int)) {
     quickSortFunc(a, i + 2, high, comp);
 }
 
-void quickSortMethod(int* a, int low, int high, CMethod& obj) {
+// QuickSort con puntero a metodo de clase
+void quickSortMethodPtr(int* a, int low, int high, bool (CMethod::*comp)(int, int), CMethod& obj) {
     if (low >= high) return;
     int pivot = a[high];
     int i = low - 1;
     for (int j = low; j < high; ++j) {
-        if (obj.method(a[j], pivot)) {
+        if ((obj.*comp)(a[j], pivot)) {
             ++i;
             swap(a[i], a[j]);
         }
     }
     swap(a[i + 1], a[high]);
-    quickSortMethod(a, low, i, obj);
-    quickSortMethod(a, i + 2, high, obj);
+    quickSortMethodPtr(a, low, i, comp, obj);
+    quickSortMethodPtr(a, i + 2, high, comp, obj);
 }
 
 void quickSortObjInline(int* a, int low, int high, const CObjectInline& comp) {
@@ -113,8 +114,7 @@ void quickSortPolimorfismo(int* a, int low, int high, const PolimorfismoBase* co
     quickSortPolimorfismo(a, i + 2, high, comp);
 }
 
-
-// Medición
+// Medicion
 template <typename Func, typename... Args>
 long long medirTiempo(Func f, Args&&... args) {
     auto inicio = chrono::high_resolution_clock::now();
@@ -130,42 +130,13 @@ int main() {
     vector<int> base(N);
     for (int& val : base) val = dist(rng);
 
-    int* a1 = new int[N];
-    int* a2 = new int[N];
-    int* a3 = new int[N];
-    int* a4 = new int[N];
-    int* a5 = new int[N];
+    vector<int> tamanos = {10'000, 30'000, 50'000, 70'000, 90'000, 110'000, 200'000, 300'000, 400'000, 500'000, 700'000, 900'000, 1'000'000};
+    vector<string> metodos = {"funcion", "metodo_ptr", "obj_inline", "obj_no_inline", "polimorfismo"};
+    vector<vector<long long>> resultados(metodos.size(), vector<long long>(tamanos.size()));
 
-    copy(base.begin(), base.end(), a1);
-    copy(base.begin(), base.end(), a2);
-    copy(base.begin(), base.end(), a3);
-    copy(base.begin(), base.end(), a4);
-    copy(base.begin(), base.end(), a5);
-
-    CMethod objMethod;
-    CObjectInline objInline;
-    CObjectNoInline objNoInline;
-    PolimorfismoDerivado objPoli;
-
-    cout << "Tiempo (puntero a funcion): "
-         << medirTiempo(quickSortFunc, a1, 0, N - 1, less_than) << " ms\n";
-    cout << "Tiempo (metodo de objeto): "
-         << medirTiempo(quickSortMethod, a2, 0, N - 1, ref(objMethod)) << " ms\n";
-    cout << "Tiempo (objeto inline): "
-         << medirTiempo(quickSortObjInline, a3, 0, N - 1, ref(objInline)) << " ms\n";
-    cout << "Tiempo (objeto no-inline): "
-         << medirTiempo(quickSortObjNoInline, a4, 0, N - 1, ref(objNoInline)) << " ms\n";
-    cout << "Tiempo (polimorfismo): "
-         << medirTiempo(quickSortPolimorfismo, a5, 0, N - 1, &objPoli) << " ms\n";
-
-    ofstream archivo("resultados.csv");
-    archivo << "tamaño,metodo,tiempo_ms\n";
-
-    vector<int> tamaños = {10'000, 30'000, 50'000, 70'000, 90'000, 110'000, 200'000, 300'000, 400'000, 500'000, 700'000, 900'000, 1'000'000};
-
-    for (int n : tamaños) {
-        vector<int> base(n);
-        for (int& val : base) val = dist(rng);
+    for (size_t i = 0; i < tamanos.size(); ++i) {
+        int n = tamanos[i];
+        vector<int> subarr(base.begin(), base.begin() + n);
 
         int* a1 = new int[n];
         int* a2 = new int[n];
@@ -173,22 +144,27 @@ int main() {
         int* a4 = new int[n];
         int* a5 = new int[n];
 
-        copy(base.begin(), base.end(), a1);
-        copy(base.begin(), base.end(), a2);
-        copy(base.begin(), base.end(), a3);
-        copy(base.begin(), base.end(), a4);
-        copy(base.begin(), base.end(), a5);
+        copy(subarr.begin(), subarr.end(), a1);
+        copy(subarr.begin(), subarr.end(), a2);
+        copy(subarr.begin(), subarr.end(), a3);
+        copy(subarr.begin(), subarr.end(), a4);
+        copy(subarr.begin(), subarr.end(), a5);
 
         CMethod objMethod;
         CObjectInline objInline;
         CObjectNoInline objNoInline;
         PolimorfismoDerivado objPoli;
 
-        archivo << n << ",funcion," << medirTiempo(quickSortFunc, a1, 0, n - 1, less_than) << "\n";
-        archivo << n << ",metodo," << medirTiempo(quickSortMethod, a2, 0, n - 1, ref(objMethod)) << "\n";
-        archivo << n << ",obj_inline," << medirTiempo(quickSortObjInline, a3, 0, n - 1, ref(objInline)) << "\n";
-        archivo << n << ",obj_no_inline," << medirTiempo(quickSortObjNoInline, a4, 0, n - 1, ref(objNoInline)) << "\n";
-        archivo << n << ",polimorfismo," << medirTiempo(quickSortPolimorfismo, a5, 0, n - 1, &objPoli) << "\n";
+        resultados[0][i] = medirTiempo(quickSortFunc, a1, 0, n - 1, less_than);
+        resultados[1][i] = medirTiempo(quickSortMethodPtr, a2, 0, n - 1, &CMethod::method, ref(objMethod));
+        resultados[2][i] = medirTiempo(quickSortObjInline, a3, 0, n - 1, ref(objInline));
+        resultados[3][i] = medirTiempo(quickSortObjNoInline, a4, 0, n - 1, ref(objNoInline));
+        resultados[4][i] = medirTiempo(quickSortPolimorfismo, a5, 0, n - 1, &objPoli);
+
+        cout << "Tamaño " << n << ":\n";
+        for (size_t m = 0; m < metodos.size(); ++m) {
+            cout << "  Tiempo (" << metodos[m] << "): " << resultados[m][i] << " ms\n";
+        }
 
         delete[] a1;
         delete[] a2;
@@ -197,6 +173,18 @@ int main() {
         delete[] a5;
     }
 
+    ofstream archivo("resultados.csv");
+    archivo << "tamaño";
+    for (const auto& m : metodos) archivo << "," << m;
+    archivo << "\n";
+
+    for (size_t i = 0; i < tamanos.size(); ++i) {
+        archivo << tamanos[i];
+        for (size_t m = 0; m < metodos.size(); ++m) {
+            archivo << "," << resultados[m][i];
+        }
+        archivo << "\n";
+    }
     archivo.close();
     return 0;
 }
