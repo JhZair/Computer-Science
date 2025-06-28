@@ -2,7 +2,7 @@
 using namespace std;
 
 //agregar templates
-class iteratorx{
+class iterador{
 
 	int *x;
 	
@@ -16,29 +16,29 @@ public:
 	bool operator<(int *p){
 		return(x < p);
 	}
-	iteratorx operator++(){	//sobrecarga de prefix, para posfix es un int de parámetro.
-		iteratorx a;		// probar hacer con puntero this para incrementar el puntero.
+	iterador operator++(){	//sobrecarga de prefix, para posfix es un int de parï¿½metro.
+		iterador a;		// probar hacer con puntero this para incrementar el puntero.
 		a = ++x;
 		return a;
 	}
-	friend ostream &operator<<( ostream &output, const iteratorx &i ) { 
+	friend ostream &operator<<( ostream &output, const iterador &i ) { 
 		output << *(i.x);
 		return output;            
 	}
 };
 
 int main() {
-	iteratorx it;
+	iterador iterador;
 	int A[10] = {1,2,3,4,5,6,7,8,9,0};
 	
-	for (it = A; it < A+10; ++it) {
-		cout << it << ' ';
+	for (iterador = A; iterador < A+10; ++iterador) {
+		cout << iterador << ' ';
 	}
 	
 	cout<< endl;
 	
 	return 0;
 }
-/*hacer clase, que ordene un array(qick sort, bubble sort, etc) la parte de la condición en el ordenamiento ocnvertir a functor, con template.
+/*hacer clase, que ordene un array(qick sort, bubble sort, etc) la parte de la condicion en el ordenamiento convertir a functor, con template.
 el template que tenga tipo y orden. se tiene que llamar de esta forma: OrdenAsc.ordene(ini, fin), ini y fin son punteros.
-y recorrer el array con en iterador,*/
+y recorrer el array con el iterador,*/

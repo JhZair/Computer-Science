@@ -9,7 +9,6 @@ using namespace std;
 
 constexpr int N = 1000000;
 
-// Comparadores
 bool less_than(int a, int b) { return a < b; }
 
 class CMethod {
@@ -37,7 +36,6 @@ public:
     bool comparar(int a, int b) const override { return a < b; }
 };
 
-// QuickSort con puntero a funcion
 void quickSortFunc(int* a, int low, int high, bool (*comp)(int, int)) {
     if (low >= high) return;
     int pivot = a[high];
@@ -53,7 +51,6 @@ void quickSortFunc(int* a, int low, int high, bool (*comp)(int, int)) {
     quickSortFunc(a, i + 2, high, comp);
 }
 
-// QuickSort con puntero a metodo de clase
 void quickSortMethodPtr(int* a, int low, int high, bool (CMethod::*comp)(int, int), CMethod& obj) {
     if (low >= high) return;
     int pivot = a[high];
